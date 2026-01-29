@@ -16,6 +16,12 @@
     html { scroll-behavior: smooth; }
     .high-contrast { filter: contrast(1.5); }
     .highlight-links a { text-decoration: underline !important; font-weight: bold !important; }
+    .testimonial-card { 
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      border-radius: 20px;
+      padding: 20px;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -50,6 +56,7 @@
         seeYou: "נתראה!!",
         signedBy: "להב",
         registerTitle: "הרשמה לסדנה",
+        testimonialsTitle: "מה אומרים המשתתפים",
         fullName: "שם מלא",
         email: "אימייל",
         phone: "טלפון",
@@ -61,9 +68,6 @@
         close: "סגור",
         sending: "שולח...",
         accessibility: "נגישות",
-        increaseFontSize: "הגדל טקסט",
-        decreaseFontSize: "הקטן טקסט",
-        resetFontSize: "אפס גודל טקסט",
         highContrast: "ניגודיות גבוהה",
         highlightLinks: "הדגש קישורים"
       },
@@ -92,6 +96,7 @@
         seeYou: "See you!!",
         signedBy: "Lahav",
         registerTitle: "Register for Workshop",
+        testimonialsTitle: "What Participants Say",
         fullName: "Full Name",
         email: "Email",
         phone: "Phone",
@@ -103,13 +108,28 @@
         close: "Close",
         sending: "Sending...",
         accessibility: "Accessibility",
-        increaseFontSize: "Increase Text Size",
-        decreaseFontSize: "Decrease Text Size",
-        resetFontSize: "Reset Text Size",
         highContrast: "High Contrast",
         highlightLinks: "Highlight Links"
       }
     };
+
+    const testimonials = [
+      { text: "המון תודה להב 🌸היה מקסים, ומרגיع ומחבר. נהננו מאוד! ואת מהממת ✨", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/110d33679_IMG_0865.jpg" },
+      { text: "גם אני לא נרגעת. זה היה פשוט מקסים.", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/c8196f3ba_IMG_0867.jpg" },
+      { text: "אמא ואני כך נהנו! את מהממתי! והעברנו את ההמלצה שלנו הלאה! שמחתי להכיר ❤️❤️❤️", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/d249cbfc0_IMG_0918.jpg" },
+      { text: "אתמול הבאתי לאמא את הספר מתנה, היא ממש אהבה ממש", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/0a4bb1ff2_IMG_1354.jpg" },
+      { text: "להב אהובה רציתי להודות לך כל כך על אתמול! היתה חוויה קסומה ונהנינו כל כרע! את נהממת ברמות ומוכשרת שאין דברים כאלה ❤️😍", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/ace89d7ae_IMG_1395.jpg" },
+      { text: "תודה לך על ערב מהנה ומחכים ❤️", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/53f94a368_IMG_2363.jpg" },
+      { text: "הייתי איצלך עם הבנות שלי ומאוד מאוד נהנינו כבר סיפרתי למלא אנשים סביבי ובקשו פרטים נקווה שגם יינעו 🙏", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/68f383254_IMG_2411.jpg" },
+      { text: "כולם עפו על המתנה!!!! 👏👏👏", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/478e30a41_IMG_3974.jpg" },
+      { text: "תודה על היום היה ממש כיף ומוצלח!! 💕💕 מרגישים שאת משקיעה בדברים הקטנים", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/dfb1725ca_IMG_5630.jpg" },
+      { text: "היה לי באמת הכי כיף בעולם!! הבן זוג שלי ערף על זהההה 🤍", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/8609989c8_IMG_5634.jpg" },
+      { text: "תודה היה באמת מהממם!!", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/ba47aac4f_IMG_6884.jpg" },
+      { text: "עד עכשיו אני באורות תשמעי זה יצא כלכך ואו!", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/1013f6659_IMG_7589.jpg" },
+      { text: "היה מאוד כיף היום!!", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/3a7d9ec0a_IMG_9062.jpg" },
+      { text: "תודה רבה, היה ממש כיף, ואת מקסימה 🙏❤️", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/ea2c8286f_IMG_9063.jpg" },
+      { text: "או מי גד להב זה הכי יפה בעולם", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/463e09ddd_IMG_9064.jpg" }
+    ];
 
     const LanguageContext = createContext();
 
@@ -351,6 +371,59 @@
       );
     }
 
+    function TestimonialsSection() {
+      const { t, isRTL } = useLanguage();
+      const [currentIndex, setCurrentIndex] = useState(0);
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+        }, 4000);
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <section className={`py-16 px-6 bg-gradient-to-b from-white to-amber-50/30 ${isRTL ? 'rtl' : 'ltr'}`}>
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-12 text-center">
+              {t.testimonialsTitle}
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {testimonials.slice(currentIndex, currentIndex + 6).map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="testimonial-card transform hover:scale-105 transition-transform duration-300"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <img 
+                    src={testimonial.image}
+                    alt="המלצה"
+                    className="w-full h-48 object-cover rounded-xl mb-4"
+                  />
+                  <p className="text-sm leading-relaxed">
+                    {testimonial.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-center gap-2 mt-8">
+              {Array.from({ length: Math.ceil(testimonials.length / 6) }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index * 6)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    Math.floor(currentIndex / 6) === index ? 'bg-amber-600 w-8' : 'bg-stone-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     function RegistrationForm() {
       const { t, isRTL } = useLanguage();
       const [formData, setFormData] = useState({
@@ -500,6 +573,7 @@
             <HeroSection />
             <AboutSection />
             <ProgramSection />
+            <TestimonialsSection />
             <RegistrationForm />
             <footer className="py-8 bg-stone-900 text-center">
               <p className="text-stone-500 text-sm">
