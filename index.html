@@ -5,25 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>סדנת פיסול ספרים - להב</title>
   <link rel="icon" href__="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  
+  <!-- React & Babel -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
   <link href__="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
-    body { font-family: 'Frank Ruhl Libre', serif; }
-    .ltr { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    html { scroll-behavior: smooth; }
-    .high-contrast { filter: contrast(1.5); }
-    .highlight-links a { text-decoration: underline !important; font-weight: bold !important; }
+    body { 
+      font-family: 'Frank Ruhl Libre', serif;
+      margin: 0;
+      padding: 0;
+    }
+    .ltr { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    }
+    html { 
+      scroll-behavior: smooth; 
+    }
     
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      100% { transform: translateX(-33.333%); }
     }
     
-    .scroll-animation {
-      animation: scroll 60s linear infinite;
+    .scroll-container {
+      animation: scroll 80s linear infinite;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .animate-float {
+      animation: float 2s ease-in-out infinite;
     }
   </style>
 </head>
@@ -31,15 +62,15 @@
   <div id="root"></div>
   
   <script type="text/babel">
-    const { useState, createContext, useContext, useEffect } = React;
+    const { useState, useContext, createContext } = React;
 
+    // Translations
     const translations = {
       he: {
         title: "סדנת פיסול ספרים",
         subtitle: "הפכו ספר ישן ליצירת אמנות מרגשת",
         aboutTitle: "על הסדנה",
         aboutText: `אמנות פיסול ספרים היא אומנות שבה לוקחים ספר ישן (ושמור) והופכים אותו לפיסול מיוחד, דקורטיבי ועם משמעות סנטימנטלית שנשארת לאורך שנים ❤️`,
-        aboutMe: "להב ברק, 28, אמנית ומנחת סדנאות פיסול ספרים.",
         duration: "משך הסדנה: כשעתיים וחצי",
         whatAwaits: "מה מצפה לנו?",
         items: [
@@ -69,17 +100,13 @@
         successTitle: "ההרשמה התקבלה! 🎉",
         successText: "תודה על ההרשמה! אצור איתכם קשר בהקדם לאישור ופרטים נוספים.",
         close: "סגור",
-        sending: "שולח...",
-        accessibility: "נגישות",
-        highContrast: "ניגודיות גבוהה",
-        highlightLinks: "הדגש קישורים"
+        sending: "שולח..."
       },
       en: {
         title: "Book Folding Workshop",
         subtitle: "Transform an old book into a moving work of art",
         aboutTitle: "About the Workshop",
         aboutText: `Book sculpting is an art form where we take an old (yet preserved) book and transform it into a unique, decorative piece with sentimental meaning that lasts for years ❤️`,
-        aboutMe: "Lahav Barak, 28, artist and book sculpting workshop instructor.",
         duration: "Duration: approximately 2.5 hours",
         whatAwaits: "What awaits us?",
         items: [
@@ -109,13 +136,11 @@
         successTitle: "Registration Received! 🎉",
         successText: "Thank you for registering! I'll contact you soon with confirmation and additional details.",
         close: "Close",
-        sending: "Sending...",
-        accessibility: "Accessibility",
-        highContrast: "High Contrast",
-        highlightLinks: "Highlight Links"
+        sending: "Sending..."
       }
     };
 
+    // Testimonials data
     const testimonials = [
       { text: "המון תודה להב 🌸היה מקסים, ומרגיע ומחבר. נהננו מאוד! ואת מהממת ✨", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/110d33679_IMG_0865.jpg" },
       { text: "גם אני לא נרגעת. זה היה פשוט מקסים.", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/c8196f3ba_IMG_0867.jpg" },
@@ -134,6 +159,7 @@
       { text: "או מי גד להב זה הכי יפה בעולם", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/463e09ddd_IMG_9064.jpg" }
     ];
 
+    // Language Context
     const LanguageContext = createContext();
 
     function LanguageProvider({ children }) {
@@ -143,7 +169,7 @@
       
       return (
         <LanguageContext.Provider value={{ lang, setLang, t, isRTL }}>
-          <div dir={isRTL ? 'rtl' : 'ltr'} className={isRTL ? 'rtl' : 'ltr'}>
+          <div dir={isRTL ? 'rtl' : 'ltr'} className={isRTL ? '' : 'ltr'}>
             {children}
           </div>
         </LanguageContext.Provider>
@@ -154,98 +180,7 @@
       return useContext(LanguageContext);
     }
 
-    function AccessibilityMenu() {
-      const { t } = useLanguage();
-      const [isOpen, setIsOpen] = useState(false);
-      const [fontSize, setFontSize] = useState(100);
-      const [highContrast, setHighContrast] = useState(false);
-      const [highlightLinks, setHighlightLinks] = useState(false);
-
-      useEffect(() => {
-        document.documentElement.style.fontSize = `${fontSize}%`;
-      }, [fontSize]);
-
-      useEffect(() => {
-        if (highContrast) {
-          document.body.classList.add('high-contrast');
-        } else {
-          document.body.classList.remove('high-contrast');
-        }
-      }, [highContrast]);
-
-      useEffect(() => {
-        if (highlightLinks) {
-          document.body.classList.add('highlight-links');
-        } else {
-          document.body.classList.remove('highlight-links');
-        }
-      }, [highlightLinks]);
-
-      return (
-        <div className="fixed bottom-6 left-6 z-50">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-12 h-12 bg-stone-600 hover:bg-stone-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
-            aria-label={t.accessibility}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-            </svg>
-          </button>
-
-          {isOpen && (
-            <div className="absolute bottom-16 left-0 bg-white rounded-2xl shadow-2xl p-4 w-64 border border-stone-200">
-              <h3 className="text-sm font-semibold text-stone-800 mb-3 pb-2 border-b">{t.accessibility}</h3>
-              
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-stone-600 mb-2">גודל טקסט</p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setFontSize(Math.max(80, fontSize - 10))}
-                      className="flex-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-sm transition-colors"
-                    >
-                      A-
-                    </button>
-                    <button
-                      onClick={() => setFontSize(100)}
-                      className="flex-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-sm transition-colors"
-                    >
-                      A
-                    </button>
-                    <button
-                      onClick={() => setFontSize(Math.min(150, fontSize + 10))}
-                      className="flex-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-sm transition-colors"
-                    >
-                      A+
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setHighContrast(!highContrast)}
-                  className={`w-full px-3 py-2 rounded-lg text-sm text-right transition-colors ${
-                    highContrast ? 'bg-stone-800 text-white' : 'bg-stone-100 hover:bg-stone-200 text-stone-700'
-                  }`}
-                >
-                  {t.highContrast}
-                </button>
-
-                <button
-                  onClick={() => setHighlightLinks(!highlightLinks)}
-                  className={`w-full px-3 py-2 rounded-lg text-sm text-right transition-colors ${
-                    highlightLinks ? 'bg-stone-800 text-white' : 'bg-stone-100 hover:bg-stone-200 text-stone-700'
-                  }`}
-                >
-                  {t.highlightLinks}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
+    // Language Toggle Component
     function LanguageToggle() {
       const { lang, setLang } = useLanguage();
       return (
@@ -262,60 +197,53 @@
       );
     }
 
+    // Hero Section
     function HeroSection() {
       const { t, isRTL } = useLanguage();
       return (
         <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50" />
-          <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto ${isRTL ? 'rtl' : 'ltr'}`}>
-            <div>
-              <h1 className="text-5xl md:text-7xl font-light tracking-tight text-stone-800 mb-6">
-                {t.title}
-              </h1>
-              <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed">
-                {t.subtitle}
-              </p>
-              <div className="mt-12">
-                <a 
-                  href__="#register"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-full text-lg font-light hover:bg-stone-700 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                >
-                  {t.registerTitle}
-                </a>
-              </div>
+          <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in ${isRTL ? '' : 'ltr'}`}>
+            <h1 className="text-5xl md:text-7xl font-light tracking-tight text-stone-800 mb-6">
+              {t.title}
+            </h1>
+            <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed mb-12">
+              {t.subtitle}
+            </p>
+            <a 
+              href__="#register"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-full text-lg font-light hover:bg-stone-700 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            >
+              {t.registerTitle}
+            </a>
+          </div>
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float">
+            <div className="w-6 h-10 border-2 border-stone-400 rounded-full flex justify-center pt-2">
+              <div className="w-1.5 h-1.5 bg-stone-400 rounded-full" />
             </div>
           </div>
         </section>
       );
     }
 
+    // About Section
     function AboutSection() {
       const { t, isRTL } = useLanguage();
       return (
-        <section className={`py-16 px-6 bg-white ${isRTL ? 'rtl' : 'ltr'}`}>
+        <section className={`py-24 px-6 bg-white ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-4xl mx-auto">
             <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-8">
                 {t.aboutTitle}
               </h2>
-              <p className="text-lg md:text-xl text-stone-600 leading-relaxed mb-6 max-w-3xl mx-auto">
+              <p className="text-lg md:text-xl text-stone-600 leading-relaxed mb-8 max-w-3xl mx-auto">
                 {t.aboutText}
               </p>
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/316e170a3_.jpeg"
-                  alt="להב ברק"
-                  className="w-20 h-20 rounded-full object-cover shadow-lg"
-                />
-                <p className="text-base md:text-lg text-stone-500 max-w-2xl">
-                  {t.aboutMe}
-                </p>
-              </div>
               <div className="inline-flex items-center gap-2 px-6 py-3 bg-amber-50 rounded-full text-amber-800">
                 <span className="font-light">{t.duration}</span>
               </div>
             </div>
-            <div className="mt-12">
+            <div className="mt-16">
               <div className="rounded-3xl overflow-hidden shadow-2xl">
                 <img 
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/e92dfd473_eatpraylove.png" 
@@ -329,12 +257,13 @@
       );
     }
 
+    // Program Section
     function ProgramSection() {
       const { t, isRTL } = useLanguage();
       return (
-        <section className={`py-16 px-6 bg-gradient-to-b from-amber-50/50 to-white ${isRTL ? 'rtl' : 'ltr'}`}>
+        <section className={`py-24 px-6 bg-gradient-to-b from-amber-50/50 to-white ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-16 text-center">
               {t.whatAwaits}
             </h2>
             <div className="space-y-4">
@@ -350,7 +279,7 @@
                 </div>
               ))}
             </div>
-            <div className="mt-12 space-y-6">
+            <div className="mt-16 space-y-6">
               <div className="flex items-center justify-center gap-2 text-rose-600">
                 <span className="text-lg font-light">{t.noExperience}</span>
               </div>
@@ -360,7 +289,7 @@
               <p className="text-center text-lg text-stone-500">
                 {t.waitingText}
               </p>
-              <div className="mt-8 p-8 bg-white rounded-3xl shadow-sm text-center">
+              <div className="mt-12 p-8 bg-white rounded-3xl shadow-sm text-center">
                 <div className="text-stone-700 mb-3">
                   <span className="text-lg">{t.location}</span>
                 </div>
@@ -374,9 +303,10 @@
       );
     }
 
+    // Testimonials Section
     function TestimonialsSection() {
       const { t } = useLanguage();
-      const duplicatedTestimonials = [...testimonials, ...testimonials];
+      const duplicatedTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
       return (
         <section className="py-16 px-0 bg-gradient-to-b from-white to-amber-50/30 overflow-hidden">
@@ -385,18 +315,18 @@
               {t.testimonialsTitle}
             </h2>
           </div>
-
           <div className="relative">
-            <div className="flex gap-6 scroll-animation" style={{ width: 'max-content' }}>
+            <div className="flex gap-6 scroll-container" style={{ width: 'max-content' }}>
               {duplicatedTestimonials.map((testimonial, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-80 bg-gradient-to-br from-stone-800 to-stone-900 rounded-3xl overflow-hidden shadow-xl"
+                  className="flex-shrink-0 bg-gradient-to-br from-stone-800 to-stone-900 rounded-3xl overflow-hidden shadow-xl"
+                  style={{ maxWidth: '400px' }}
                 >
                   <img 
                     src={testimonial.image}
                     alt="המלצה"
-                    className="w-full h-64 object-cover"
+                    className="w-full h-auto"
                   />
                   <div className="p-6">
                     <p className="text-white text-sm leading-relaxed">
@@ -411,6 +341,7 @@
       );
     }
 
+    // Registration Form
     function RegistrationForm() {
       const { t, isRTL } = useLanguage();
       const [formData, setFormData] = useState({
@@ -444,7 +375,7 @@
       };
 
       return (
-        <section id="register" className={`py-16 px-6 bg-stone-800 ${isRTL ? 'rtl' : 'ltr'}`}>
+        <section id="register" className={`py-24 px-6 bg-stone-800 ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
@@ -531,7 +462,7 @@
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className={`bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl ${isRTL ? 'rtl' : 'ltr'}`}
+                className={`bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl ${isRTL ? '' : 'ltr'}`}
               >
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-green-600 text-3xl">✓</span>
@@ -540,7 +471,7 @@
                 <p className="text-stone-600 mb-8">{t.successText}</p>
                 <button
                   onClick={() => setShowSuccess(false)}
-                  className="px-8 py-3 bg-stone-800 hover:bg-stone-700 rounded-full text-white"
+                  className="px-8 py-3 bg-stone-800 hover:bg-stone-700 rounded-full text-white transition-colors"
                 >
                   {t.close}
                 </button>
@@ -551,12 +482,12 @@
       );
     }
 
+    // Main App
     function App() {
       return (
         <LanguageProvider>
           <div className="min-h-screen bg-white">
             <LanguageToggle />
-            <AccessibilityMenu />
             <HeroSection />
             <AboutSection />
             <ProgramSection />
@@ -572,6 +503,7 @@
       );
     }
 
+    // Render
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
