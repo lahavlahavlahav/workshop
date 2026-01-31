@@ -15,7 +15,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Fonts -->
-  <link href__="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href__="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;600;700&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
   
   <style>
     body { 
@@ -30,13 +30,10 @@
       scroll-behavior: smooth; 
     }
     
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-33.333%); }
-    }
-    
-    .scroll-container {
-      animation: scroll 80s linear infinite;
+    /* Fun font for small text */
+    .text-xs, .text-sm, label, input::placeholder, textarea::placeholder {
+      font-family: 'Heebo', 'Frank Ruhl Libre', sans-serif !important;
+      font-weight: 300;
     }
     
     @keyframes fadeIn {
@@ -90,7 +87,6 @@
         seeYou: "נתראה!!",
         signedBy: "להב",
         registerTitle: "הרשמה לסדנה",
-        testimonialsTitle: "מה אומרים המשתתפים",
         fullName: "שם מלא",
         email: "אימייל",
         phone: "טלפון",
@@ -126,7 +122,6 @@
         seeYou: "See you!!",
         signedBy: "Lahav",
         registerTitle: "Register for Workshop",
-        testimonialsTitle: "What Participants Say",
         fullName: "Full Name",
         email: "Email",
         phone: "Phone",
@@ -139,25 +134,6 @@
         sending: "Sending..."
       }
     };
-
-    // Testimonials data
-    const testimonials = [
-      { text: "המון תודה להב 🌸היה מקסים, ומרגיע ומחבר. נהננו מאוד! ואת מהממת ✨", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/110d33679_IMG_0865.jpg" },
-      { text: "גם אני לא נרגעת. זה היה פשוט מקסים.", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/c8196f3ba_IMG_0867.jpg" },
-      { text: "אמא ואני כך נהנו! את מהממתי! והעברנו את ההמלצה שלנו הלאה! שמחתי להכיר ❤️❤️❤️", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/d249cbfc0_IMG_0918.jpg" },
-      { text: "אתמול הבאתי לאמא את הספר מתנה, היא ממש אהבה ממש", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/0a4bb1ff2_IMG_1354.jpg" },
-      { text: "להב אהובה רציתי להודות לך כל כך על אתמול! היתה חוויה קסומה ונהנינו כל כרע! את נהממת ברמות ומוכשרת שאין דברים כאלה ❤️😍", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/ace89d7ae_IMG_1395.jpg" },
-      { text: "תודה לך על ערב מהנה ומחכים ❤️", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/53f94a368_IMG_2363.jpg" },
-      { text: "הייתי איצלך עם הבנות שלי ומאוד מאוד נהנינו כבר סיפרתי למלא אנשים סביבי ובקשו פרטים נקווה שגם יינעו 🙏", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/68f383254_IMG_2411.jpg" },
-      { text: "כולם עפו על המתנה!!!! 👏👏👏", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/478e30a41_IMG_3974.jpg" },
-      { text: "תודה על היום היה ממש כיף ומוצלח!! 💕💕 מרגישים שאת משקיעה בדברים הקטנים", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/dfb1725ca_IMG_5630.jpg" },
-      { text: "היה לי באמת הכי כיף בעולם!! הבן זוג שלי ערף על זהההה 🤍", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/8609989c8_IMG_5634.jpg" },
-      { text: "תודה היה באמת מהממם!!", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/ba47aac4f_IMG_6884.jpg" },
-      { text: "עד עכשיו אני באורות תשמעי זה יצא כלכך ואו!", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/1013f6659_IMG_7589.jpg" },
-      { text: "היה מאוד כיף היום!!", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/3a7d9ec0a_IMG_9062.jpg" },
-      { text: "תודה רבה, היה ממש כיף, ואת מקסימה 🙏❤️", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/ea2c8286f_IMG_9063.jpg" },
-      { text: "או מי גד להב זה הכי יפה בעולם", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/463e09ddd_IMG_9064.jpg" }
-    ];
 
     // Language Context
     const LanguageContext = createContext();
@@ -297,44 +273,6 @@
                   <span>{t.parking}</span>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    // Testimonials Section
-    function TestimonialsSection() {
-      const { t } = useLanguage();
-      const duplicatedTestimonials = [...testimonials, ...testimonials, ...testimonials];
-
-      return (
-        <section className="py-16 px-0 bg-gradient-to-b from-white to-amber-50/30 overflow-hidden">
-          <div className="max-w-6xl mx-auto px-6 mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-stone-800 text-center">
-              {t.testimonialsTitle}
-            </h2>
-          </div>
-          <div className="relative">
-            <div className="flex gap-6 scroll-container" style={{ width: 'max-content' }}>
-              {duplicatedTestimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="flex-shrink-0 bg-gradient-to-br from-stone-800 to-stone-900 rounded-3xl overflow-hidden shadow-xl"
-                  style={{ maxWidth: '400px' }}
-                >
-                  <img 
-                    src={testimonial.image}
-                    alt="המלצה"
-                    className="w-full h-auto"
-                  />
-                  <div className="p-6">
-                    <p className="text-white text-sm leading-relaxed">
-                      {testimonial.text}
-                    </p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
@@ -491,7 +429,6 @@
             <HeroSection />
             <AboutSection />
             <ProgramSection />
-            <TestimonialsSection />
             <RegistrationForm />
             <footer className="py-8 bg-stone-900 text-center">
               <p className="text-stone-500 text-sm">
@@ -507,4 +444,3 @@
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
-</html>
