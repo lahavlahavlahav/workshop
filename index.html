@@ -6,15 +6,12 @@
   <title>סדנת פיסול ספרים - להב</title>
   <link rel="icon" href__="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
   
-  <!-- React & Babel -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@11/dist/framer-motion.js"></script>
   
-  <!-- Fonts -->
   <link href__="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;600;700&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
   
   <style>
@@ -29,29 +26,18 @@
     html { 
       scroll-behavior: smooth; 
     }
-    
-    /* Fun font for small text */
     .text-xs, .text-sm, label, input::placeholder, textarea::placeholder {
       font-family: 'Heebo', 'Frank Ruhl Libre', sans-serif !important;
       font-weight: 300;
     }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .dark-mode {
+      filter: invert(1) hue-rotate(180deg);
     }
-    
-    .animate-fade-in {
-      animation: fadeIn 0.8s ease-out;
+    .dark-mode img {
+      filter: invert(1) hue-rotate(180deg);
     }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .animate-float {
-      animation: float 2s ease-in-out infinite;
+    .high-contrast {
+      filter: contrast(1.5);
     }
   </style>
 </head>
@@ -59,7 +45,56 @@
   <div id="root"></div>
   
   <script type="text/babel">
-    const { useState, useContext, createContext } = React;
+    const { useState, useContext, createContext, useEffect } = React;
+
+    // Lucide Icons (SVG inline)
+    const Instagram = () => (
+      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    );
+
+    const Accessibility = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="6" r="2"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/>
+      </svg>
+    );
+
+    const Plus = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
+      </svg>
+    );
+
+    const Minus = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4"/>
+      </svg>
+    );
+
+    const Type = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>
+      </svg>
+    );
+
+    const Moon = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    );
+
+    const Sun = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    );
+
+    const X = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    );
 
     // Translations
     const translations = {
@@ -97,54 +132,18 @@
         successText: "תודה על ההרשמה! אצור איתכם קשר בהקדם לאישור ופרטים נוספים.",
         close: "סגור",
         sending: "שולח..."
-      },
-      en: {
-        title: "Book Folding Workshop",
-        subtitle: "Transform an old book into a moving work of art",
-        aboutTitle: "About the Workshop",
-        aboutText: `Book sculpting is an art form where we take an old (yet preserved) book and transform it into a unique, decorative piece with sentimental meaning that lasts for years ❤️`,
-        duration: "Duration: approximately 2.5 hours",
-        whatAwaits: "What awaits us?",
-        items: [
-          "Background about me and the world of book sculpting",
-          "Learning folding techniques and starting to create",
-          "Coffee break",
-          "Continuing creation",
-          "Closing words, photographing results and sharing experiences",
-          "Wrapping the book as a gift to take home 🎁"
-        ],
-        noExperience: "No prior experience required ✨",
-        experienceText: "An experiential, connecting and creative workshop awaits us",
-        waitingText: "I'm really looking forward to meeting you and creating together!",
-        location: "The workshop takes place in Ramat HaHayal, Tel Aviv",
-        parking: "Plenty of parking available in the area ✨",
-        note: "I take care of everything! Just bring yourself and a good mood ❤️",
-        seeYou: "See you!!",
-        signedBy: "Lahav",
-        registerTitle: "Register for Workshop",
-        fullName: "Full Name",
-        email: "Email",
-        phone: "Phone",
-        participants: "Number of Participants",
-        notes: "Notes (optional)",
-        submit: "Submit Registration",
-        successTitle: "Registration Received! 🎉",
-        successText: "Thank you for registering! I'll contact you soon with confirmation and additional details.",
-        close: "Close",
-        sending: "Sending..."
       }
     };
 
-    // Language Context
     const LanguageContext = createContext();
 
     function LanguageProvider({ children }) {
-      const [lang, setLang] = useState('he');
+      const [lang] = useState('he');
       const t = translations[lang];
       const isRTL = lang === 'he';
       
       return (
-        <LanguageContext.Provider value={{ lang, setLang, t, isRTL }}>
+        <LanguageContext.Provider value={{ lang, t, isRTL }}>
           <div dir={isRTL ? 'rtl' : 'ltr'} className={isRTL ? '' : 'ltr'}>
             {children}
           </div>
@@ -156,23 +155,6 @@
       return useContext(LanguageContext);
     }
 
-    // Language Toggle Component
-    function LanguageToggle() {
-      const { lang, setLang } = useLanguage();
-      return (
-        <div className="fixed top-6 right-6 z-50">
-          <button
-            onClick={() => setLang(lang === 'he' ? 'en' : 'he')}
-            className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-stone-200"
-          >
-            <span className="text-sm font-medium text-stone-700">
-              {lang === 'he' ? 'EN' : 'עב'}
-            </span>
-          </button>
-        </div>
-      );
-    }
-
     // Instagram Button
     function InstagramButton() {
       return (
@@ -180,12 +162,125 @@
           href__="https://www.instagram.com/liloubooks____"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform duration-300 group"
+          style={{ animation: 'fadeIn 0.5s 0.5s both' }}
         >
-          <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 opacity-50" style={{ animation: 'pulse 2s infinite' }}/>
+          <Instagram />
+          <div className="absolute bottom-full mb-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <div className="bg-stone-800 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap">
+              עקבו באינסטגרם
+            </div>
+          </div>
         </a>
+      );
+    }
+
+    // Accessibility Menu
+    function AccessibilityMenu() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [fontSize, setFontSize] = useState(100);
+      const [isDarkMode, setIsDarkMode] = useState(false);
+      const [highContrast, setHighContrast] = useState(false);
+
+      useEffect(() => {
+        document.documentElement.style.fontSize = `${fontSize}%`;
+      }, [fontSize]);
+
+      useEffect(() => {
+        if (isDarkMode) {
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+        }
+      }, [isDarkMode]);
+
+      useEffect(() => {
+        if (highContrast) {
+          document.body.classList.add('high-contrast');
+        } else {
+          document.body.classList.remove('high-contrast');
+        }
+      }, [highContrast]);
+
+      const increaseFontSize = () => {
+        if (fontSize < 150) setFontSize(fontSize + 10);
+      };
+
+      const decreaseFontSize = () => {
+        if (fontSize > 80) setFontSize(fontSize - 10);
+      };
+
+      const resetSettings = () => {
+        setFontSize(100);
+        setIsDarkMode(false);
+        setHighContrast(false);
+      };
+
+      return (
+        <>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300"
+            style={{ animation: 'fadeIn 0.5s 0.5s both' }}
+          >
+            <Accessibility className="w-6 h-6" />
+          </button>
+
+          {isOpen && (
+            <div className="fixed bottom-24 left-6 z-50 bg-white rounded-2xl shadow-2xl p-6 w-72 border border-stone-200" style={{ animation: 'fadeIn 0.3s' }}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-stone-800 flex items-center gap-2">
+                  <Accessibility className="w-5 h-5" />
+                  נגישות
+                </h3>
+                <button onClick={() => setIsOpen(false)} className="text-stone-400 hover:text-stone-600 transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-stone-600 flex items-center gap-2">
+                    <Type className="w-4 h-4" />
+                    גודל טקסט: {fontSize}%
+                  </label>
+                  <div className="flex gap-2">
+                    <button onClick={decreaseFontSize} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors">
+                      <Minus className="w-4 h-4" />
+                      <span className="text-sm">קטן</span>
+                    </button>
+                    <button onClick={increaseFontSize} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors">
+                      <Plus className="w-4 h-4" />
+                      <span className="text-sm">גדול</span>
+                    </button>
+                  </div>
+                </div>
+
+                <button onClick={() => setIsDarkMode(!isDarkMode)} className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isDarkMode ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-800'}`}>
+                  <span className="flex items-center gap-2">
+                    {isDarkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                    <span className="text-sm">מצב כהה</span>
+                  </span>
+                  <div className={`w-10 h-6 rounded-full ${isDarkMode ? 'bg-blue-500' : 'bg-stone-300'} relative transition-colors`}>
+                    <div className={`absolute top-1 ${isDarkMode ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all`} />
+                  </div>
+                </button>
+
+                <button onClick={() => setHighContrast(!highContrast)} className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${highContrast ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-800'}`}>
+                  <span className="text-sm">ניגודיות גבוהה</span>
+                  <div className={`w-10 h-6 rounded-full ${highContrast ? 'bg-blue-500' : 'bg-stone-300'} relative transition-colors`}>
+                    <div className={`absolute top-1 ${highContrast ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all`} />
+                  </div>
+                </button>
+
+                <button onClick={resetSettings} className="w-full px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm transition-colors">
+                  איפוס הגדרות
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       );
     }
 
@@ -201,21 +296,18 @@
       return (
         <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50" />
-          <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in ${isRTL ? '' : 'ltr'}`}>
+          <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto ${isRTL ? '' : 'ltr'}`} style={{ animation: 'fadeIn 0.8s' }}>
             <h1 className="text-5xl md:text-7xl font-light tracking-tight text-stone-800 mb-6">
               {t.title}
             </h1>
             <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed mb-12">
               {t.subtitle}
             </p>
-            <button 
-              onClick={scrollToRegister}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-full text-lg font-light hover:bg-stone-700 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
-            >
+            <button onClick={scrollToRegister} className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-full text-lg font-light hover:bg-stone-700 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
               {t.registerTitle}
             </button>
           </div>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2" style={{ animation: 'float 2s ease-in-out infinite' }}>
             <div className="w-6 h-10 border-2 border-stone-400 rounded-full flex justify-center pt-2">
               <div className="w-1.5 h-1.5 bg-stone-400 rounded-full" />
             </div>
@@ -231,23 +323,15 @@
         <section className={`py-24 px-6 bg-white ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-4xl mx-auto">
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-8">
-                {t.aboutTitle}
-              </h2>
-              <p className="text-lg md:text-xl text-stone-600 leading-relaxed mb-8 max-w-3xl mx-auto">
-                {t.aboutText}
-              </p>
+              <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-8">{t.aboutTitle}</h2>
+              <p className="text-lg md:text-xl text-stone-600 leading-relaxed mb-8 max-w-3xl mx-auto">{t.aboutText}</p>
               <div className="inline-flex items-center gap-2 px-6 py-3 bg-amber-50 rounded-full text-amber-800">
                 <span className="font-light">{t.duration}</span>
               </div>
             </div>
             <div className="mt-16">
               <div className="rounded-3xl overflow-hidden shadow-2xl">
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/e92dfd473_eatpraylove.png" 
-                  alt="Book sculpting art" 
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
-                />
+                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/e92dfd473_eatpraylove.png" alt="Book sculpting art" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"/>
               </div>
             </div>
           </div>
@@ -261,15 +345,10 @@
       return (
         <section className={`py-24 px-6 bg-gradient-to-b from-amber-50/50 to-white ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-16 text-center">
-              {t.whatAwaits}
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-16 text-center">{t.whatAwaits}</h2>
             <div className="space-y-4">
               {t.items.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300"
-                >
+                <div key={index} className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
                   <div className="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
                     <span className="text-amber-700">✓</span>
                   </div>
@@ -281,12 +360,8 @@
               <div className="flex items-center justify-center gap-2 text-rose-600">
                 <span className="text-lg font-light">{t.noExperience}</span>
               </div>
-              <p className="text-center text-xl text-stone-600 font-light">
-                {t.experienceText}
-              </p>
-              <p className="text-center text-lg text-stone-500">
-                {t.waitingText}
-              </p>
+              <p className="text-center text-xl text-stone-600 font-light">{t.experienceText}</p>
+              <p className="text-center text-lg text-stone-500">{t.waitingText}</p>
               <div className="mt-12 p-8 bg-white rounded-3xl shadow-sm text-center">
                 <div className="text-stone-700 mb-3">
                   <span className="text-lg">{t.location}</span>
@@ -304,27 +379,19 @@
     // Registration Form
     function RegistrationForm() {
       const { t, isRTL } = useLanguage();
-      const [formData, setFormData] = useState({
-        full_name: '',
-        email: '',
-        phone: '',
-        participants: 1,
-        notes: ''
-      });
+      const [formData, setFormData] = useState({ full_name: '', email: '', phone: '', participants: 1, notes: '' });
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [showSuccess, setShowSuccess] = useState(false);
 
       const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
         try {
           await fetch('https://formspree.io/f/mgoykzdp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
           });
-          
           setIsSubmitting(false);
           setShowSuccess(true);
           setFormData({ full_name: '', email: '', phone: '', participants: 1, notes: '' });
@@ -338,101 +405,48 @@
         <section id="register" className={`py-24 px-6 bg-stone-800 ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                {t.registerTitle}
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">{t.registerTitle}</h2>
               <p className="text-stone-400 text-lg font-light">{t.note}</p>
             </div>
-
             <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-2xl space-y-6">
               <div className="space-y-2">
                 <label className="text-stone-700 block">{t.fullName}</label>
-                <input
-                  type="text"
-                  value={formData.full_name}
-                  onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                  required
-                  className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
+                <input type="text" value={formData.full_name} onChange={(e) => setFormData({ ...formData, full_name: e.target.value })} required className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
-
               <div className="space-y-2">
                 <label className="text-stone-700 block">{t.email}</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
+                <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
-
               <div className="space-y-2">
                 <label className="text-stone-700 block">{t.phone}</label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  required
-                  className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
+                <input type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
-
               <div className="space-y-2">
                 <label className="text-stone-700 block">{t.participants}</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={formData.participants}
-                  onChange={(e) => setFormData({ ...formData, participants: parseInt(e.target.value) || 1 })}
-                  className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
+                <input type="number" min="1" max="10" value={formData.participants} onChange={(e) => setFormData({ ...formData, participants: parseInt(e.target.value) || 1 })} className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
-
               <div className="space-y-2">
                 <label className="text-stone-700 block">{t.notes}</label>
-                <textarea
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  rows={3}
-                  className="w-full rounded-xl border border-stone-200 px-4 py-3 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none resize-none"
-                />
+                <textarea value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={3} className="w-full rounded-xl border border-stone-200 px-4 py-3 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none resize-none"/>
               </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full h-14 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-lg font-light transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50"
-              >
+              <button type="submit" disabled={isSubmitting} className="w-full h-14 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-lg font-light transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50">
                 {isSubmitting ? t.sending : t.submit}
               </button>
             </form>
-
             <div className="text-center mt-12 text-stone-400">
               <p className="text-lg mb-2">{t.seeYou}</p>
               <p className="text-xl">❤️ {t.signedBy}</p>
             </div>
           </div>
-
           {showSuccess && (
-            <div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6"
-              onClick={() => setShowSuccess(false)}
-            >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className={`bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl ${isRTL ? '' : 'ltr'}`}
-              >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setShowSuccess(false)}>
+              <div onClick={(e) => e.stopPropagation()} className={`bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl ${isRTL ? '' : 'ltr'}`}>
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-green-600 text-3xl">✓</span>
                 </div>
                 <h3 className="text-2xl font-light text-stone-800 mb-4">{t.successTitle}</h3>
                 <p className="text-stone-600 mb-8">{t.successText}</p>
-                <button
-                  onClick={() => setShowSuccess(false)}
-                  className="px-8 py-3 bg-stone-800 hover:bg-stone-700 rounded-full text-white transition-colors"
-                >
+                <button onClick={() => setShowSuccess(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 rounded-full text-white transition-colors">
                   {t.close}
                 </button>
               </div>
@@ -442,29 +456,40 @@
       );
     }
 
-    // Main App
     function App() {
       return (
         <LanguageProvider>
           <div className="min-h-screen bg-white">
-            <LanguageToggle />
             <InstagramButton />
+            <AccessibilityMenu />
             <HeroSection />
             <AboutSection />
             <ProgramSection />
             <RegistrationForm />
             <footer className="py-8 bg-stone-900 text-center">
-              <p className="text-stone-500 text-sm">
-                © {new Date().getFullYear()} Lahav • Book Sculpting Workshop
-              </p>
+              <p className="text-stone-500 text-sm">© {new Date().getFullYear()} Lahav • Book Sculpting Workshop</p>
             </footer>
           </div>
         </LanguageProvider>
       );
     }
 
-    // Render
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+  </style>
 </body>
 </html>
