@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>סדנת פיסול ספרים - להב</title>
+  <title>סדנת פיסול ספרים - LILOU BOOKS</title>
   <link rel="icon" href__="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
   
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -39,6 +39,18 @@
     .high-contrast {
       filter: contrast(1.5);
     }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
   </style>
 </head>
 <body>
@@ -46,8 +58,9 @@
   
   <script type="text/babel">
     const { useState, useContext, createContext, useEffect } = React;
+    const { motion, AnimatePresence } = window.FramerMotion;
 
-    // Lucide Icons (SVG inline)
+    // Lucide Icons
     const Instagram = () => (
       <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -56,7 +69,7 @@
 
     const Accessibility = ({ className }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="6" r="2"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/>
+        <circle cx="12" cy="6" r="2"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v8"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m8 12 4 4 4-4"/>
       </svg>
     );
 
@@ -74,7 +87,7 @@
 
     const Type = ({ className }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>
+        <polyline strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} points="4 7 4 4 20 4 20 7"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="9" y1="20" x2="15" y2="20"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="12" y1="4" x2="12" y2="20"/>
       </svg>
     );
 
@@ -86,13 +99,73 @@
 
     const Sun = ({ className }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        <circle cx="12" cy="12" r="5"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="12" y1="1" x2="12" y2="3"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="12" y1="21" x2="12" y2="23"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="1" y1="12" x2="3" y2="12"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="21" y1="12" x2="23" y2="12"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
       </svg>
     );
 
     const X = ({ className }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    );
+
+    const BookOpen = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+      </svg>
+    );
+
+    const Sparkles = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+      </svg>
+    );
+
+    const Clock = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/><polyline strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} points="12 6 12 12 16 14"/>
+      </svg>
+    );
+
+    const Check = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} points="20 6 9 17 4 12"/>
+      </svg>
+    );
+
+    const MapPin = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+    );
+
+    const Car = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0h-.01M15 17a2 2 0 104 0m-4 0h-.01"/>
+      </svg>
+    );
+
+    const Heart = ({ className }) => (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      </svg>
+    );
+
+    const Send = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="22" y1="2" x2="11" y2="13"/><polygon strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    );
+
+    const CheckCircle = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    );
+
+    const Loader2 = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
       </svg>
     );
 
@@ -158,21 +231,36 @@
     // Instagram Button
     function InstagramButton() {
       return (
-        <a
+        <motion.a
           href__="https://www.instagram.com/liloubooks____"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform duration-300 group"
-          style={{ animation: 'fadeIn 0.5s 0.5s both' }}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg group cursor-pointer"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
         >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 opacity-50" style={{ animation: 'pulse 2s infinite' }}/>
+          <motion.div
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
           <Instagram />
           <div className="absolute bottom-full mb-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <div className="bg-stone-800 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap">
               עקבו באינסטגרם
             </div>
           </div>
-        </a>
+        </motion.a>
       );
     }
 
@@ -219,67 +307,78 @@
 
       return (
         <>
-          <button
+          <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300"
-            style={{ animation: 'fadeIn 0.5s 0.5s both' }}
+            className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5 }}
           >
             <Accessibility className="w-6 h-6" />
-          </button>
+          </motion.button>
 
-          {isOpen && (
-            <div className="fixed bottom-24 left-6 z-50 bg-white rounded-2xl shadow-2xl p-6 w-72 border border-stone-200" style={{ animation: 'fadeIn 0.3s' }}>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-stone-800 flex items-center gap-2">
-                  <Accessibility className="w-5 h-5" />
-                  נגישות
-                </h3>
-                <button onClick={() => setIsOpen(false)} className="text-stone-400 hover:text-stone-600 transition-colors">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm text-stone-600 flex items-center gap-2">
-                    <Type className="w-4 h-4" />
-                    גודל טקסט: {fontSize}%
-                  </label>
-                  <div className="flex gap-2">
-                    <button onClick={decreaseFontSize} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors">
-                      <Minus className="w-4 h-4" />
-                      <span className="text-sm">קטן</span>
-                    </button>
-                    <button onClick={increaseFontSize} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors">
-                      <Plus className="w-4 h-4" />
-                      <span className="text-sm">גדול</span>
-                    </button>
-                  </div>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, x: -20 }}
+                animate={{ opacity: 1, y: 0, x: 0 }}
+                exit={{ opacity: 0, y: 20, x: -20 }}
+                className="fixed bottom-24 left-6 z-50 bg-white rounded-2xl shadow-2xl p-6 w-72 border border-stone-200"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-medium text-stone-800 flex items-center gap-2">
+                    <Accessibility className="w-5 h-5" />
+                    נגישות
+                  </h3>
+                  <button onClick={() => setIsOpen(false)} className="text-stone-400 hover:text-stone-600 transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
 
-                <button onClick={() => setIsDarkMode(!isDarkMode)} className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isDarkMode ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-800'}`}>
-                  <span className="flex items-center gap-2">
-                    {isDarkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                    <span className="text-sm">מצב כהה</span>
-                  </span>
-                  <div className={`w-10 h-6 rounded-full ${isDarkMode ? 'bg-blue-500' : 'bg-stone-300'} relative transition-colors`}>
-                    <div className={`absolute top-1 ${isDarkMode ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all`} />
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm text-stone-600 flex items-center gap-2">
+                      <Type className="w-4 h-4" />
+                      גודל טקסט: {fontSize}%
+                    </label>
+                    <div className="flex gap-2">
+                      <button onClick={decreaseFontSize} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors">
+                        <Minus className="w-4 h-4" />
+                        <span className="text-sm">קטן</span>
+                      </button>
+                      <button onClick={increaseFontSize} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors">
+                        <Plus className="w-4 h-4" />
+                        <span className="text-sm">גדול</span>
+                      </button>
+                    </div>
                   </div>
-                </button>
 
-                <button onClick={() => setHighContrast(!highContrast)} className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${highContrast ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-800'}`}>
-                  <span className="text-sm">ניגודיות גבוהה</span>
-                  <div className={`w-10 h-6 rounded-full ${highContrast ? 'bg-blue-500' : 'bg-stone-300'} relative transition-colors`}>
-                    <div className={`absolute top-1 ${highContrast ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all`} />
-                  </div>
-                </button>
+                  <button onClick={() => setIsDarkMode(!isDarkMode)} className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isDarkMode ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-800'}`}>
+                    <span className="flex items-center gap-2">
+                      {isDarkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                      <span className="text-sm">מצב כהה</span>
+                    </span>
+                    <div className={`w-10 h-6 rounded-full ${isDarkMode ? 'bg-blue-500' : 'bg-stone-300'} relative transition-colors`}>
+                      <div className={`absolute top-1 ${isDarkMode ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all`} />
+                    </div>
+                  </button>
 
-                <button onClick={resetSettings} className="w-full px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm transition-colors">
-                  איפוס הגדרות
-                </button>
-              </div>
-            </div>
-          )}
+                  <button onClick={() => setHighContrast(!highContrast)} className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${highContrast ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-800'}`}>
+                    <span className="text-sm">ניגודיות גבוהה</span>
+                    <div className={`w-10 h-6 rounded-full ${highContrast ? 'bg-blue-500' : 'bg-stone-300'} relative transition-colors`}>
+                      <div className={`absolute top-1 ${highContrast ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all`} />
+                    </div>
+                  </button>
+
+                  <button onClick={resetSettings} className="w-full px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm transition-colors">
+                    איפוס הגדרות
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </>
       );
     }
@@ -296,22 +395,56 @@
       return (
         <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50" />
-          <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto ${isRTL ? '' : 'ltr'}`} style={{ animation: 'fadeIn 0.8s' }}>
-            <h1 className="text-5xl md:text-7xl font-light tracking-tight text-stone-800 mb-6">
-              {t.title}
-            </h1>
-            <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed mb-12">
-              {t.subtitle}
-            </p>
-            <button onClick={scrollToRegister} className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-full text-lg font-light hover:bg-stone-700 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
-              {t.registerTitle}
-            </button>
+          
+          <motion.div 
+            className="absolute top-20 left-10 w-64 h-64 bg-amber-200/30 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute bottom-20 right-10 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+
+          <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto ${isRTL ? '' : 'ltr'}`}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="text-sm md:text-base tracking-[0.3em] text-stone-500 font-light mb-8">
+                LILOU BOOKS
+              </p>
+
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <BookOpen className="w-8 h-8 text-amber-600" />
+                <Sparkles className="w-6 h-6 text-rose-500" />
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-light tracking-tight text-stone-800 mb-6">
+                {t.title}
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed mb-12">
+                {t.subtitle}
+              </p>
+
+              <button onClick={scrollToRegister} className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-full text-lg font-light hover:bg-stone-700 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+                {t.registerTitle}
+              </button>
+            </motion.div>
           </div>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2" style={{ animation: 'float 2s ease-in-out infinite' }}>
+          
+          <motion.div 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
             <div className="w-6 h-10 border-2 border-stone-400 rounded-full flex justify-center pt-2">
               <div className="w-1.5 h-1.5 bg-stone-400 rounded-full" />
             </div>
-          </div>
+          </motion.div>
         </section>
       );
     }
@@ -322,18 +455,31 @@
       return (
         <section className={`py-24 px-6 bg-white ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-4xl mx-auto">
-            <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
               <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-8">{t.aboutTitle}</h2>
               <p className="text-lg md:text-xl text-stone-600 leading-relaxed mb-8 max-w-3xl mx-auto">{t.aboutText}</p>
               <div className="inline-flex items-center gap-2 px-6 py-3 bg-amber-50 rounded-full text-amber-800">
+                <Clock className="w-5 h-5" />
                 <span className="font-light">{t.duration}</span>
               </div>
-            </div>
-            <div className="mt-16">
+            </motion.div>
+            <motion.div 
+              className="mt-16"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               <div className="rounded-3xl overflow-hidden shadow-2xl">
-                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/e92dfd473_eatpraylove.png" alt="Book sculpting art" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"/>
+                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697b63aca39075badbb52d49/e92dfd473_eatpraylove.png" alt="Book sculpting" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"/>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       );
@@ -345,32 +491,54 @@
       return (
         <section className={`py-24 px-6 bg-gradient-to-b from-amber-50/50 to-white ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-light text-stone-800 mb-16 text-center">{t.whatAwaits}</h2>
+            <motion.h2 
+              className="text-3xl md:text-4xl font-light text-stone-800 mb-16 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              {t.whatAwaits}
+            </motion.h2>
             <div className="space-y-4">
               {t.items.map((item, index) => (
-                <div key={index} className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300"
+                >
                   <div className="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                    <span className="text-amber-700">✓</span>
+                    <Check className="w-5 h-5 text-amber-700" />
                   </div>
                   <span className="text-lg text-stone-700">{item}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
-            <div className="mt-16 space-y-6">
+            <motion.div 
+              className="mt-16 space-y-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
               <div className="flex items-center justify-center gap-2 text-rose-600">
+                <Sparkles className="w-5 h-5" />
                 <span className="text-lg font-light">{t.noExperience}</span>
               </div>
               <p className="text-center text-xl text-stone-600 font-light">{t.experienceText}</p>
               <p className="text-center text-lg text-stone-500">{t.waitingText}</p>
               <div className="mt-12 p-8 bg-white rounded-3xl shadow-sm text-center">
-                <div className="text-stone-700 mb-3">
+                <div className="flex items-center justify-center gap-2 text-stone-700 mb-3">
+                  <MapPin className="w-5 h-5 text-amber-600" />
                   <span className="text-lg">{t.location}</span>
                 </div>
-                <div className="text-stone-500">
+                <div className="flex items-center justify-center gap-2 text-stone-500">
+                  <Car className="w-5 h-5 text-stone-400" />
                   <span>{t.parking}</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       );
@@ -404,54 +572,99 @@
       return (
         <section id="register" className={`py-24 px-6 bg-stone-800 ${isRTL ? '' : 'ltr'}`}>
           <div className="max-w-xl mx-auto">
-            <div className="text-center mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
               <h2 className="text-3xl md:text-4xl font-light text-white mb-4">{t.registerTitle}</h2>
               <p className="text-stone-400 text-lg font-light">{t.note}</p>
-            </div>
-            <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-2xl space-y-6">
+            </motion.div>
+            <motion.form 
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl p-8 shadow-2xl space-y-6"
+            >
               <div className="space-y-2">
-                <label className="text-stone-700 block">{t.fullName}</label>
+                <label className="text-stone-700 block text-sm">{t.fullName}</label>
                 <input type="text" value={formData.full_name} onChange={(e) => setFormData({ ...formData, full_name: e.target.value })} required className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
               <div className="space-y-2">
-                <label className="text-stone-700 block">{t.email}</label>
+                <label className="text-stone-700 block text-sm">{t.email}</label>
                 <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
               <div className="space-y-2">
-                <label className="text-stone-700 block">{t.phone}</label>
+                <label className="text-stone-700 block text-sm">{t.phone}</label>
                 <input type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
               <div className="space-y-2">
-                <label className="text-stone-700 block">{t.participants}</label>
+                <label className="text-stone-700 block text-sm">{t.participants}</label>
                 <input type="number" min="1" max="10" value={formData.participants} onChange={(e) => setFormData({ ...formData, participants: parseInt(e.target.value) || 1 })} className="w-full h-12 rounded-xl border border-stone-200 px-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
               </div>
               <div className="space-y-2">
-                <label className="text-stone-700 block">{t.notes}</label>
+                <label className="text-stone-700 block text-sm">{t.notes}</label>
                 <textarea value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={3} className="w-full rounded-xl border border-stone-200 px-4 py-3 focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none resize-none"/>
               </div>
-              <button type="submit" disabled={isSubmitting} className="w-full h-14 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-lg font-light transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50">
-                {isSubmitting ? t.sending : t.submit}
+              <button type="submit" disabled={isSubmitting} className="w-full h-14 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-lg font-light transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    {t.sending}
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    {t.submit}
+                  </>
+                )}
               </button>
-            </form>
-            <div className="text-center mt-12 text-stone-400">
+            </motion.form>
+            <motion.div 
+              className="text-center mt-12 text-stone-400"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+            >
               <p className="text-lg mb-2">{t.seeYou}</p>
-              <p className="text-xl">❤️ {t.signedBy}</p>
-            </div>
+              <p className="text-xl flex items-center justify-center gap-2">
+                <Heart className="w-5 h-5 text-rose-400" />
+                {t.signedBy}
+              </p>
+            </motion.div>
           </div>
-          {showSuccess && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setShowSuccess(false)}>
-              <div onClick={(e) => e.stopPropagation()} className={`bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl ${isRTL ? '' : 'ltr'}`}>
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-green-600 text-3xl">✓</span>
-                </div>
-                <h3 className="text-2xl font-light text-stone-800 mb-4">{t.successTitle}</h3>
-                <p className="text-stone-600 mb-8">{t.successText}</p>
-                <button onClick={() => setShowSuccess(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 rounded-full text-white transition-colors">
-                  {t.close}
-                </button>
-              </div>
-            </div>
-          )}
+          <AnimatePresence>
+            {showSuccess && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+                onClick={() => setShowSuccess(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className={`bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl ${isRTL ? '' : 'ltr'}`}
+                >
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-light text-stone-800 mb-4">{t.successTitle}</h3>
+                  <p className="text-stone-600 mb-8">{t.successText}</p>
+                  <button onClick={() => setShowSuccess(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 rounded-full text-white transition-colors">
+                    {t.close}
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
       );
     }
@@ -476,20 +689,5 @@
 
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
-
-  <style>
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.2); opacity: 0.8; }
-    }
-  </style>
 </body>
 </html>
